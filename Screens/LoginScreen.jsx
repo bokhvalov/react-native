@@ -13,43 +13,21 @@ import {
   Keyboard,
 } from "react-native";
 import backgroundImg from "../assets/background.jpg";
-import AddButton from "../Components/AddButton";
-import DeleteButton from "../Components/DeleteButton";
-import * as ImagePicker from "expo-image-picker";
 import { SubmitButton } from "../Components/SubmitButton";
 
 const initialState = {
-  login: "",
   email: "",
   password: "",
-  avatarUri: "",
 };
 
-export default function RegistrationScreen() {
+export default function LoginScreen() {
   const [state, setState] = useState(initialState);
   const [isSecureTextEntry, setIsSecureTextEntry] = useState(true);
   const [isKeyboardOpened, setIsKeyboardOpened] = useState(false);
-  const [isLoginInputFocused, setIsLoginInputFocused] = useState(false);
   const [isEmailInputFocused, setIsEmailInputFocused] = useState(false);
   const [isPasswordInputFocused, setIsPasswordInputFocused] = useState(false);
 
   const screenWidth = Dimensions.get("window").width;
-
-  const handleAddAvatar = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setState((prevState) => ({
-        ...prevState,
-        avatarUri: result.assets[0].uri,
-      }));
-    }
-  };
 
   const toggleSecureTextEntry = () => {
     setIsSecureTextEntry(!isSecureTextEntry);
@@ -59,7 +37,7 @@ export default function RegistrationScreen() {
     setState((prevState) => ({ ...prevState, [key]: value }));
   };
 
-  const goToSignIn = () => {};
+  const goToSignUp = () => {};
 
   const hideKeyboard = () => {
     setIsKeyboardOpened(false);
@@ -77,47 +55,11 @@ export default function RegistrationScreen() {
           <View
             style={{
               ...styles.container,
-              height: Platform.OS === "ios" && isKeyboardOpened ? 819 : 529,
+              height:
+                Platform.OS === "ios" ? (isKeyboardOpened ? 700 : 489) : 489,
             }}
           >
-            <View style={{ ...styles.avatar, left: (screenWidth - 120) / 2 }}>
-              {state.avatarUri ? (
-                <>
-                  <Image
-                    source={{ uri: state.avatarUri }}
-                    style={styles.avatarImage}
-                  />
-                  <DeleteButton
-                    onPress={() =>
-                      setState((prevState) => ({
-                        ...prevState,
-                        avatarUri: "",
-                      }))
-                    }
-                  />
-                </>
-              ) : (
-                <AddButton onPress={handleAddAvatar} />
-              )}
-            </View>
-            <Text style={styles.screenTitle}>Registration</Text>
-            <TextInput
-              placeholder="Login"
-              value={state.login}
-              onChangeText={(value) => {
-                inputHandler("login", value);
-              }}
-              onFocus={() => {
-                setIsKeyboardOpened(true);
-                setIsLoginInputFocused(true);
-              }}
-              onBlur={() => setIsLoginInputFocused(false)}
-              style={{
-                ...styles.input,
-                width: screenWidth - 32,
-                backgroundColor: isLoginInputFocused ? "#fff" : "#F6F6F6",
-              }}
-            />
+            <Text style={styles.screenTitle}>Login</Text>
             <TextInput
               placeholder="Email"
               value={state.email}
@@ -174,9 +116,9 @@ export default function RegistrationScreen() {
               </TouchableOpacity>
             </View>
             <SubmitButton title="Register" onPress={() => console.log(state)} />
-            <TouchableOpacity onPress={goToSignIn}>
+            <TouchableOpacity onPress={goToSignUp}>
               <Text style={{ ...styles.subBtnText, padding: 16 }}>
-                Already have an account? Sign Up
+                Don't have an account? Sign Up
               </Text>
             </TouchableOpacity>
           </View>
@@ -216,7 +158,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   screenTitle: {
-    marginTop: 92,
+    marginTop: 32,
     marginBottom: 33,
     fontFamily: "Roboto-Medium",
     fontSize: 30,
