@@ -66,7 +66,6 @@ export default function RegistrationScreen() {
     Keyboard.dismiss();
   };
 
-  console.log("test");
   return (
     <TouchableWithoutFeedback onPress={hideKeyboard}>
       <ImageBackground
